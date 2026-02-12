@@ -1,0 +1,523 @@
+<div id="user-info-section" class="section">
+    <h2>Your Information</h2>
+    <div style="margin-bottom: 20px;">
+        <label for="user-name" style="display:block; margin-bottom:8px; font-weight:600; color:#333;">Name</label>
+        <input type="text" id="user-name" placeholder="Enter your full name"
+            style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:16px; box-sizing: border-box;">
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="user-email" style="display:block; margin-bottom:8px; font-weight:600; color:#333;">Email</label>
+        <input type="email" id="user-email" placeholder="Enter your email address"
+            style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:16px; box-sizing: border-box;">
+    </div>
+</div>
+<div id="sections-container"></div>
+
+<!-- Inline Results Section -->
+<div id="results-container"></div>
+
+<style>
+    body {
+        background: #ffffff;
+        font-family: "Poppins", sans-serif;
+        margin: 20px;
+        padding: 0;
+    }
+
+    .section {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 25px;
+        border-radius: 10px;
+        border: 1px solid #f0f0f0;
+        background: #ffffff;
+    }
+
+    h2 {
+        color: #d73148;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+    }
+
+    .scale-table {
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        flex-wrap: wrap;
+    }
+
+    .scale-box {
+        flex: 1;
+        margin: 5px;
+        padding: 12px;
+        border-radius: 8px;
+        background: #f8f8f8;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+        border: 1px solid #f0f0f0;
+        cursor: pointer;
+    }
+
+    .scale-box.active {
+        background: #fde3e7;
+        opacity: 1;
+        border: 1px solid #d73148;
+    }
+
+    .scale-box h3 {
+        color: #000;
+        margin-bottom: 5px;
+    }
+
+    .scale-box p {
+        font-size: 0.9rem;
+        color: #333;
+        margin: 0;
+        text-align: left;
+    }
+
+    .slider-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 8px;
+        border-radius: 5px;
+        background: #fde3e7;
+        outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+        height: 8px;
+        border-radius: 5px;
+        background: linear-gradient(to right, #d73148 var(--range-progress, 50%), #fde3e7 var(--range-progress, 50%));
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #d73148;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        margin-top: -6px;
+        cursor: pointer;
+    }
+
+    .slider-value {
+        font-weight: 600;
+        color: #d73148;
+        min-width: 20px;
+        text-align: center;
+    }
+
+    /* Results container styles */
+    #results-container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 30px;
+        border-radius: 10px;
+        background: #fff;
+        border: none;
+    }
+
+    #results-container h2 {
+        color: #d73148;
+        margin-bottom: 20px;
+    }
+
+    #results-container ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    #results-container li {
+        margin-bottom: 15px;
+        font-size: 18px;
+    }
+
+    .additional-content {
+        background: #ffffff;
+        padding: 30px 35px;
+        border-radius: 14px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        max-width: 700px;
+        margin: 30px auto;
+        font-family: "Poppins", sans-serif;
+        line-height: 1.7;
+        color: #333;
+        animation: fadeIn 0.5s ease-in-out;
+        border: 1px solid #d73148;
+    }
+
+    .additional-content p {
+        margin-bottom: 18px;
+        font-size: 16px;
+        color: #444;
+    }
+
+    .additional-content p:last-of-type {
+        font-weight: 600;
+        text-align: right;
+        font-style: italic;
+        color: #222;
+    }
+
+    .additional-content a button {
+        background: #4a6cf7;
+        color: #fff;
+        padding: 12px 28px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        font-weight: 600;
+        margin-right: 10px;
+    }
+
+    .additional-content a button:hover {
+        background: #3c58d4;
+        transform: translateY(-2px);
+    }
+
+    #close-results {
+        background: #f3f3f3 !important;
+        color: #333 !important;
+        padding: 12px 28px !important;
+        font-size: 16px;
+        border-radius: 8px !important;
+        cursor: pointer;
+        transition: 0.3s ease;
+        border: 1px solid #ddd !important;
+        margin-top: 10px;
+    }
+
+    #close-results:hover {
+        background: #e6e6e6 !important;
+        transform: translateY(-2px);
+    }
+
+    /* Fade animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    #results-container button {
+        background: #d73148;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    /* Mobile adjustments: hide slider, show all descriptions */
+    @media (max-width: 768px) {
+        .slider-container {
+            display: none;
+        }
+
+        .scale-table {
+            flex-direction: column;
+        }
+
+        .scale-box {
+            text-align: left;
+        }
+    }
+</style>
+
+<script>
+    const categories = [
+        {
+            name: "Clarity", description: [
+                "I think I am on the right track but I don’t have a clear idea where I stand right now with my business or how I am going to get where I want to go. I hope it will all work out if I work hard enough.",
+                "I know I want to build my business and I know my “why” but I just don’t have the time or energy right now to plan too far ahead and think about how I will do that. I feel like I am spinning my wheels but don’t know how to move forward.",
+                "I have a clear vision of where I want to go with my biz and I have a flexible but clear plan to get there. I have yearly, monthly, weekly and daily plans to keep moving things forward.",
+                "I have a clear vision of where I want to go with my biz and I have a flexible but clear plan to get there. I have yearly, monthly, weekly and daily plans to keep moving things forward."
+            ]
+        },
+        {
+            name: "Mindset", description: [
+                "I don't feel worthy of success. I often blame others for my results. Any setback throws me into a tailspin.",
+                "I try to stay positive and handle setbacks without being thrown off course. I limit the time I spend with negative people and content.",
+                "I am grateful for all I have. I accept responsibility for my actions and see obstacles as opportunities and focus on solutions.",
+                "I have developed a strong resilient mindset. I recognize and reframe limiting beliefs quickly. I am self-aware, solutions-focused, and I am able to maintain clarity and confidence even in uncertainty."
+            ]
+        },
+        {
+            name: "Self-Management", description: [
+                "I feel overwhelmed and exhausted all the time, and I am constantly putting out fires. It is hard for me to set priorities since I have to do it all by myself.",
+                "I set some priorities but easily get distracted. I have some standards and boundaries but often find myself compromising both.",
+                "I set priorities and I know where my time goes. I have learned to delegate where appropriate.",
+                "I know I can get the most important things done. I have clear standards and boundaries and maintain them. Delegation is easy for me."
+            ]
+        },
+        {
+            name: "Marketing", description: [
+                "I feel overwhelmed and exhausted all the time, and I am constantly putting out fires. It is hard for me to set priorities since I have to do it all by myself.",
+                "I set some priorities but easily get distracted. I have some standards and boundaries but often find myself compromising both.",
+                "I set priorities and I know where my time goes. I have learned to delegate where appropriate.",
+                "I know I can get the most important things done. I have clear standards and boundaries and maintain them. Delegation is easy for me."
+            ]
+        },
+        {
+            name: "Selling", description: [
+                "I am uncomfortable about my pricing and how to close a sale. I am not clear on my offer and why it might be valuable, so I seldom get people to meet with me. When I do have a meeting with a potential client/customer, I tend to freeze when they ask a question or discuss the price, and they rarely buy.",
+                "I attract and meet with potential clients, and I convey the value of what I do, but I have an inconsistent process for closing the sale. I don't believe in the values of my offer so I often give away too much.",
+                "I have a system which helps me close most of my sales. I try to convey my value and ask what I am worth, but I still sometimes have trouble handling any objections a client or customer might have.",
+                "I am confident with the sales process and can ask and receive what I am worth. I close sales consistently. And I have a clear system for gathering feedback and testing for future sales."
+            ]
+        },
+        {
+            name: "Customer Journey and Care", description: [
+                "I have no system for onboarding new clients or follow up procedures to support them.",
+                "I deal with each client as they come on board, but I have no solid system in place. I have no stay-in-touch strategy and contact my customers inconsistently.",
+                "I have a consistent and effective onboarding process and stay-in-touch system that works well.",
+                "I have a great relationship with all my clients. They feel seen, heard, and cared for and give me repeat business and great testimonials."
+            ]
+        },
+        {
+            name: "Leadership", description: [
+                "I don't see myself as a leader and I don't always trust my own judgment. It struggle to make decisions. It is hard for me to trust others.",
+                "If I am honest, I have a tendency to micromanage, even though I may have support. I am beginning to trust myself taking some risks and making decisions.",
+                "If I am honest, I have a tendency to micromanage, even though I may have support. I am beginning to trust myself taking some risks and making decisions.",
+                "I own my role as a leader and make decisions easily and I know how and when to delegate. I am willing to take risks. I lead by example and I have a productive team who works well together. I have a positive workplace with dedicated employees"
+            ]
+        },
+        {
+            name: "Self-Care", description: [
+                "I know I should take care of myself, but who has time? I am working 24/7to keep my business going I am not getting enough sleep and I always feel tired. I don't remember when I had a day off. much less a real vacation. I eat on the run most days and not the healthiest foods. No time to exercise either I can't remember when I last had a checkup. My family and friends rarely see me and say they are worried about me.",
+                "I am trying to improve my eating habits and get more sleep and exercise, but I often find myself putting these things on the back burner if something comes up at work. I have agreed to take a vacation, but my family and friends know I will most likely work for most of it.",
+                "I am trying to improve my eating habits and get more sleep and exercise, but I often find myself putting these things on the back burner if something comes up at work. I have agreed to take a vacation, but my family and friends know I will most likely work for most of it.",
+                "I know that my business and family depend on me and the importance of taking good care of myself for them. I eat nutritious foods, exercise several times a week and get enough sleep. I schedule and keep regular checkups with my doctor and take her advice. I do things every day to lower my stress and my vacations are work-free. I am finally taking care of my company's biggest asset - ME!"
+            ]
+        },
+        {
+            name: "Money-Matters", description: [
+                "I constantly worry about $. I am hesitant to spend $ to help my business grow. I cut comers whenever I can and try everything free that comes my way. I treat my business more like a hobby. I do not have a separate budget or bank account for my business.I allow my customers to determine what I charge for my goods and services and often give discounts or offer to do things for free.",
+                "I sometimes feel guilty or like a fraud if I think I am making too much $ or if I am asking too much for my services and products. I do have a separate bank account and a budget for my business.",
+                "I sometimes feel guilty or like a fraud if I think I am making too much $ or if I am asking too much for my services and products. I do have a separate bank account and a budget for my business.",
+                "I know that my business and family depend on me and the importance of taking good care of myself for them. I eat nutritious foods, exercise several times a week and get enough sleep. I schedule and keep regular checkups with my doctor and take her advice. I do things every day to lower my stress and my vacations are work-free. I am finally taking care of my company's biggest asset - ME!"
+            ]
+        },
+    ];
+
+    const container = document.getElementById("sections-container");
+    const resultsContainer = document.getElementById("results-container");
+
+    // Render sections with all descriptions visible
+    categories.forEach(cat => {
+        const section = document.createElement("div");
+        section.className = "section";
+
+        let boxesHTML = '';
+        cat.description.forEach((desc, i) => {
+            const rangeLabel = i === 0 ? "1 – 3" : i === 1 ? "4 – 6" : i === 2 ? "7 – 9" : "10";
+            boxesHTML += `<div class="scale-box" data-value="${i + 1}">
+                    <h3>${rangeLabel}</h3>
+                    <p>${desc}</p>
+                  </div>`;
+        });
+
+        section.innerHTML = `
+    <h2>${cat.name}</h2>
+    <div class="scale-table">${boxesHTML}</div>
+    <div class="slider-container">
+      <input type="range" min="1" max="10" step="1" value="5" class="slider" data-category="${cat.name}">
+      <span class="slider-value">5</span>
+    </div>
+  `;
+
+        container.appendChild(section);
+    });
+
+    // Slider and box selection
+    document.querySelectorAll(".slider").forEach(slider => {
+        const valueText = slider.parentElement.querySelector(".slider-value");
+        const boxes = slider.closest(".section").querySelectorAll(".scale-box");
+
+        const updateSliderColor = (sliderEl) => {
+            const percent = ((sliderEl.value - sliderEl.min) / (sliderEl.max - sliderEl.min)) * 100;
+            sliderEl.style.setProperty("--range-progress", `${percent}%`);
+        };
+
+        function updateHighlight(value) {
+            boxes.forEach(box => box.classList.remove("active"));
+            boxes.forEach(box => {
+                const val = parseInt(box.dataset.value);
+                if (val === 1 && value <= 3) box.classList.add("active");
+                else if (val === 2 && value >= 4 && value <= 6) box.classList.add("active");
+                else if (val === 3 && value >= 7 && value <= 9) box.classList.add("active");
+                else if (val === 4 && value === 10) box.classList.add("active");
+            });
+        }
+
+        slider.addEventListener("input", () => {
+            const val = parseInt(slider.value);
+            valueText.textContent = val;
+            updateHighlight(val);
+            updateSliderColor(slider);
+        });
+
+        updateHighlight(parseInt(slider.value));
+        updateSliderColor(slider);
+    });
+
+    // Click description to select (mobile friendly)
+    document.querySelectorAll(".scale-box").forEach(box => {
+        box.addEventListener("click", () => {
+            const section = box.closest(".section");
+            const slider = section.querySelector(".slider");
+            const val = parseInt(box.dataset.value);
+
+            slider.value = val === 1 ? 2 : val === 4 ? 10 : val * 3; // approximate mapping
+            slider.dispatchEvent(new Event("input"));
+        });
+    });
+
+    // Submit button
+    const submitBtn = document.createElement("button");
+    submitBtn.textContent = "View Your Business Builder Insights";
+    submitBtn.style.cssText = `
+  background: #d73148;
+  color: #fff;
+  border:none;
+  padding: 12px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 20px auto;
+  display: block;
+`;
+    container.appendChild(submitBtn);
+
+    // Display results inline
+    submitBtn.addEventListener("click", () => {
+        const nameInput = document.getElementById("user-name");
+        const emailInput = document.getElementById("user-email");
+        const name = nameInput ? nameInput.value.trim() : "";
+        const email = emailInput ? emailInput.value.trim() : "";
+
+        if (!name || !email) {
+            alert("Please enter your name and email to view your results.");
+            if (nameInput && !name) nameInput.focus();
+            else if (emailInput) emailInput.focus();
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address.");
+            if (emailInput) emailInput.focus();
+            return;
+        }
+
+        let emailResult = "";
+
+        document.querySelectorAll(".slider").forEach(slider => {
+            const category = slider.dataset.category;
+            const value = parseInt(slider.value);
+            let selectedRangeMessage = "";
+
+            if (category === "Clarity") {
+                if (value >= 1 && value <= 3) selectedRangeMessage = "Define your why. Get clear on who you serve and what you offer and where you want to go.";
+                else if (value >= 4 && value <= 6) selectedRangeMessage = "Set 1-year goals. Then set 3-90-day goals and focus most of your time and energy on those goals.";
+                else if (value >= 7 && value <= 9) selectedRangeMessage = "Regularly review and align actions with your vision.";
+                else if (value === 10) selectedRangeMessage = "Mentor others to help them gain strategic clarity.";
+            } else if (category === "Mindset") {
+                if (value >= 1 && value <= 3) selectedRangeMessage = "Identify your limiting beliefs - be aware of those negative voices in your head and know that your thoughts aren't always the truth - Try journaling or working with a mindset coach";
+                else if (value >= 4 && value <= 6) selectedRangeMessage = "Begin reframing challenges and try to see them as opportunities - Use affirmations, visualization tools and self-reflection on a regular basis.";
+                else if (value >= 7 && value <= 9) selectedRangeMessage = "Cultivate a resilient mindset through routine reflection after challenges. Begin to lead others";
+                else if (value === 10) selectedRangeMessage = "Practice self-reflection on a regular basis. Speak and teach mindset work to others.";
+            } else if (category === "Self-Management") {
+                if (value >= 1 && value <= 3) selectedRangeMessage = "Track your time - Identify distractions. Try time blocking or Pomodoro.";
+                else if (value >= 4 && value <= 6) selectedRangeMessage = "Set daily and weekly priorities. Set some boundaries on your time. Eliminate major distractions. Focus and try not to multi-task. Create morning and evening routines.";
+                else if (value >= 7 && value <= 9) selectedRangeMessage = "Evaluate your systems periodically and ask your team to do the same. Continue to delegate effectively and stick to your boundaries and standards.";
+                else if (value === 10) selectedRangeMessage = "Model peak productivity. Continue to reflect and improve your systems. Be sure you communicate your standards and boundaries clearly and honor those of your employees and teammates as well as your own.";
+            } else if (category === "Marketing") {
+                if (value >= 1 && value <= 3) selectedRangeMessage = "Identify your ideal client -Choose 1 or 2 platforms and focus on them - Clarify your message and what you and your business stand for- Start creating basic content.";
+                else if (value >= 4 && value <= 6) selectedRangeMessage = "Consider packaging your offers.Are you ready for a website? If so, be sure it reflects your message and your brand - Post consistently - use Al to help but not replace your message and your voice. Try in person networking(it is one of the most effective marketing tools you have), email marketing and simple funnels. Begin tracking engagement.";
+                else if (value >= 7 && value <= 9) selectedRangeMessage = "See what works! Use analytics to refine your strategy- Repurpose content - Test your ads to be sure they are effective. Revisit your website.";
+                else if (value === 10) selectedRangeMessage = "Now it's time to create marketing systems that work without you. Build partnerships and delegate content creation to those who know you and your brand well.";
+            } else if (category === "Selling") {
+                if (value >= 1 && value <= 3) selectedRangeMessage = "Clarify your offer. Understand its value. Practice describing it confidently. Learn basic sales scripts but be sure they represent you and your business. Don't undersell yourself. This is a very common mistake for those in this stage.";
+                else if (value >= 4 && value <= 6) selectedRangeMessage = "Growth in Progress- Conduct discovery calls (in person or online) This is much easier if you have a referral. Be very clear on the value you offer. Learn to handle objections.Track your conversion rates.";
+                else if (value >= 7 && value <= 9) selectedRangeMessage = "Refine your sales process. Build a pipeline. Train others in your method.";
+                else if (value === 10) selectedRangeMessage = "Congratualtions! Use automation where appropriate. Mentor or lead a sales team. Don't ever stop listening to and serving your team and your customers. Continue to serve your clients well and use those testimonials to help with future sales.";
+            } else if (category === "Customer Journey and Care") {
+                if (value >= 1 && value <= 3) selectedRangeMessage = "Be sure you know your customers well and meet them where they are. Map out your customer journey Identify key touch points - from when you first meet them until long after they have used your products and services.";
+                else if (value >= 4 && value <= 6) selectedRangeMessage = "Ask for feedback. Improve your onboarding. Consider start building community or loyalty programs.";
+                else if (value >= 7 && value <= 9) selectedRangeMessage = "Value your clients and customers and let them know how much they mean to you. Personalize the experience. Streamline support and follow-up. Celebrate client success stories.";
+                else if (value === 10) selectedRangeMessage = "Build a team or system for consistent excellence.Create loyal brand followers.";
+            } else if (category === "Leadership") {
+                if (value >= 1 && value <= 3) selectedRangeMessage = "Reflect on your leadership style. Start small, but start owning your decisions and vision.";
+                else if (value >= 4 && value <= 6) selectedRangeMessage = "Create a positive culture. Think about what it feels like being on the receiving end of you. Get feedback. Learn to delegate. Develop team building and communication skills.";
+                else if (value >= 7 && value <= 9) selectedRangeMessage = "Empower others! This is huge! You need future leaders in your business. Create a values-driven culture. Lead through change.";
+                else if (value === 10) selectedRangeMessage = "I own my role as a leader and make decisions easily and I know how and when to delegate. I am willing to take risks. I lead by example and I have a productive team who works well together. I have a positive workplace with dedicated employees";
+            } else if (category === "Self-Care") {
+                if (value >= 1 && value <= 3) selectedRangeMessage = "Identify energy drains. Prioritize sleep, nutrition, hydration";
+                else if (value >= 4 && value <= 6) selectedRangeMessage = "Schedule breaks. Add movement and exercise. Set work boundaries. This is absolutely necessary to take care of you and your business.";
+                else if (value >= 7 && value <= 9) selectedRangeMessage = "As your business is growing, it is important to regularly unplug. Develop emotional regulation strategies. Treat self-care as a business strategy.";
+                else if (value === 10) selectedRangeMessage = "Continue to model well-being to your team and build restorative routines into your life and business rhythm.";
+            } else if (category === "Money-Matters") {
+                if (value >= 1 && value <= 3) selectedRangeMessage = "Track Income and expenses.Learn basic business finance.";
+                else if (value >= 4 && value <= 6) selectedRangeMessage = "If you haven't already, open a separate banking account for your business. Set financial goals. Develop a budget and try to stick to it";
+                else if (value >= 7 && value <= 9) selectedRangeMessage = "Analyze trends. Plan for taxes, investments, and reserves.";
+                else if (value === 10) selectedRangeMessage = "Grow wealth. Get support from financial pros. Build long-term security and financial strategy. Don't forget to celebrate your success!";
+            }
+
+            // Using <br> for HTML email formatting if supported, or just text.
+            emailResult += `<br><strong>${category}:</strong> ${selectedRangeMessage}<br>`;
+        });
+
+        // Send data to parent window (Wix Velo)
+        window.parent.postMessage({
+            type: "submit",
+            name: name,
+            email: email,
+            result: emailResult
+        }, "*");
+
+        // Show Success Message
+        const successHTML = `
+            <div class="additional-content" style="text-align: center;">
+                <h2 style="color:#d73148;">Thank You, ${name}!</h2>
+                <p style="font-size:18px;">Your Business Builder Insights have been sent to <strong>${email}</strong>.</p>
+                <p>Please check your inbox (and spam folder) for your results.</p>
+                <br>
+                <p>You've got this and I've got your back.</p>
+                <p>Life's 2 Short to wait, so let's get started!</p>
+                <p>- Judy</p>
+                <br>
+                <button id="close-results" style="background:#ccc; color:#000; border:none; padding:10px 20px; border-radius:6px; cursor:pointer;">Close</button>
+            </div>
+        `;
+
+        resultsContainer.innerHTML = successHTML;
+        resultsContainer.style.display = "block";
+        resultsContainer.scrollIntoView({ behavior: "smooth" });
+
+        // Close button functionality
+        const closeBtn = document.getElementById("close-results");
+        if (closeBtn) {
+            closeBtn.addEventListener("click", () => {
+                resultsContainer.style.display = "none";
+            });
+        }
+    });
+</script>
