@@ -84,6 +84,7 @@
 
     input[type="range"] {
         -webkit-appearance: none;
+        appearance: none;
         width: 100%;
         height: 8px;
         border-radius: 5px;
@@ -481,9 +482,11 @@
                 else if (value === 10) selectedRangeMessage = "Grow wealth. Get support from financial pros. Build long-term security and financial strategy. Don't forget to celebrate your success!";
             }
 
-            // Using <br> for HTML email formatting if supported, or just text.
-            emailResult += `<br><strong>${category}:</strong> ${selectedRangeMessage}<br>`;
+            // Using plain text formatting
+            emailResult += `\n${category.toUpperCase()}: ${selectedRangeMessage}\n`;
         });
+
+        
 
         // Send data to parent window (Wix Velo)
         window.parent.postMessage({

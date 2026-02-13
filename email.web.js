@@ -26,13 +26,31 @@ export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (n
             emails: [{ email, tag: "WORK", primary: true }]
         };
 
-        const options = {
-            allowDuplicates: true,
-            suppressAuth: true
-        };
+        // 🔍 Check if contact already exists
+        const queryOptions = { suppressAuth: true };
+        const existingContacts = await contacts.queryContacts()
+            .eq("info.emails.email", email)
+            .find(queryOptions);
 
-        const contact = await contacts.createContact(contactInfo, options);
-        const contactId = contact._id;
+        let contactId;
+
+        if (existingContacts.items.length > 0) {
+            // Use existing contact
+            contactId = existingContacts.items[0]._id;
+            console.log("✅ Found existing contact:", contactId);
+
+            // Optional: Update contact info if needed
+            // await contacts.updateContact(contactId, contactInfo, options);
+        } else {
+            // Create new contact
+            const options = {
+                allowDuplicates: false,
+                suppressAuth: true
+            };
+            const contact = await contacts.createContact(contactInfo, options);
+            contactId = contact._id;
+            console.log("✅ Created new contact:", contactId);
+        }
 
         if (!contactId) throw new Error("Failed to retrieve contact ID.");
 
@@ -42,7 +60,7 @@ export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (n
                 First_Name: firstName,
                 Last_Name: lastName,
                 Result: result,
-                SITE_URL: "https://www.simply-accounting.com/"
+                SITE_URL: "https://evpdesigns.wixstudio.com/my-site"
             }
         });
         const emailResult1 = await triggeredEmails.emailMember("VAzpW4t", "054e2505-8ea4-41c0-98f7-785a7302ec3d", {
@@ -50,13 +68,13 @@ export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (n
                 First_Name: firstName,
                 Last_Name: lastName,
                 Result: result,
-                SITE_URL: "https://www.simply-accounting.com/"
+                SITE_URL: "https://evpdesigns.wixstudio.com/my-site"
             }
         });
-        
+
 
         console.log("📧 Email sent successfully.");
-        return { success: true, message: "Email sent successfully.", result: emailResult , result2: emailResult1};
+        return { success: true, message: "Email sent successfully.", result: emailResult, result2: emailResult1 };
 
     } catch (error) {
         console.error("❌ Error in sendQuoteEmailWithContact:", error);
