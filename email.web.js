@@ -1,14 +1,14 @@
 import { webMethod, Permissions } from 'wix-web-module';
 import { contacts, triggeredEmails } from 'wix-crm-backend';
 
-export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (name, email, result) => {
+export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (name, email, phone, result) => {
     try {
 
         console.log("🟨 Input received:", { name, email, result });
 
         // ✅ Validate input
-        if (!name || !email) {
-            throw new Error("Missing required fields: name or email.");
+        if (!name || !email || !phone) {
+            throw new Error("Missing required fields: name, email, or phone.");
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,7 +23,8 @@ export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (n
         // 👥 Create contact
         const contactInfo = {
             name: { first: firstName, last: lastName },
-            emails: [{ email, tag: "WORK", primary: true }]
+            emails: [{ email, tag: "WORK", primary: true }],
+            phones: [{ phone, tag: "MOBILE", primary: true }]
         };
 
         // 🔍 Check if contact already exists
@@ -54,11 +55,11 @@ export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (n
 
         if (!contactId) throw new Error("Failed to retrieve contact ID.");
 
-        // 📤 Send triggered email
         const emailResult = await triggeredEmails.emailContact("VAzpW4t", contactId, {
             variables: {
                 First_Name: firstName,
                 Last_Name: lastName,
+                Phone: phone,
                 Result: result,
                 SITE_URL: "https://evpdesigns.wixstudio.com/my-site"
             }
@@ -67,6 +68,7 @@ export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (n
             variables: {
                 First_Name: firstName,
                 Last_Name: lastName,
+                Phone: phone,
                 Result: result,
                 SITE_URL: "https://evpdesigns.wixstudio.com/my-site"
             }

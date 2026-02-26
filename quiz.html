@@ -10,6 +10,12 @@
         <input type="email" id="user-email" placeholder="Enter your email address"
             style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:16px; box-sizing: border-box;">
     </div>
+    <div style="margin-bottom: 20px;">
+        <label for="user-phone" style="display:block; margin-bottom:8px; font-weight:600; color:#333;">Phone
+            Number</label>
+        <input type="tel" id="user-phone" placeholder="Enter your phone number"
+            style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:16px; box-sizing: border-box;">
+    </div>
 </div>
 <div id="sections-container"></div>
 
@@ -411,13 +417,16 @@
     submitBtn.addEventListener("click", () => {
         const nameInput = document.getElementById("user-name");
         const emailInput = document.getElementById("user-email");
+        const phoneInput = document.getElementById("user-phone");
         const name = nameInput ? nameInput.value.trim() : "";
         const email = emailInput ? emailInput.value.trim() : "";
+        const phone = phoneInput ? phoneInput.value.trim() : "";
 
-        if (!name || !email) {
-            alert("Please enter your name and email to view your results.");
+        if (!name || !email || !phone) {
+            alert("Please enter your name, email, and phone number to view your results.");
             if (nameInput && !name) nameInput.focus();
-            else if (emailInput) emailInput.focus();
+            else if (emailInput && !email) emailInput.focus();
+            else if (phoneInput && !phone) phoneInput.focus();
             return;
         }
 
@@ -486,13 +495,17 @@
             emailResult += `\n${category.toUpperCase()}: ${selectedRangeMessage}\n`;
         });
 
-        
+        // Add phone number to results
+        emailResult += `\nPHONE: ${phone}\n`;
+
+
 
         // Send data to parent window (Wix Velo)
         window.parent.postMessage({
             type: "submit",
             name: name,
             email: email,
+            phone: phone,
             result: emailResult
         }, "*");
 
@@ -500,14 +513,12 @@
         const successHTML = `
             <div class="additional-content" style="text-align: center;">
                 <h2 style="color:#d73148;">Thank You, ${name}!</h2>
-                <p style="font-size:18px;">Your Business Builder Insights have been sent to <strong>${email}</strong>.</p>
+                <p style="font-size:18px;">Your business builder insights have been sent to <strong>${email}</strong>.</p>
                 <p>Please check your inbox (and spam folder) for your results.</p>
                 <br>
                 <p>You've got this and I've got your back.</p>
                 <p>Life's 2 Short to wait, so let's get started!</p>
                 <p>- Judy</p>
-                <br>
-                <button id="close-results" style="background:#ccc; color:#000; border:none; padding:10px 20px; border-radius:6px; cursor:pointer;">Close</button>
             </div>
         `;
 
@@ -515,12 +526,5 @@
         resultsContainer.style.display = "block";
         resultsContainer.scrollIntoView({ behavior: "smooth" });
 
-        // Close button functionality
-        const closeBtn = document.getElementById("close-results");
-        if (closeBtn) {
-            closeBtn.addEventListener("click", () => {
-                resultsContainer.style.display = "none";
-            });
-        }
     });
 </script>
