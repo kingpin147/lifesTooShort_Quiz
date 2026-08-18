@@ -1,10 +1,10 @@
 import { webMethod, Permissions } from 'wix-web-module';
 import { contacts, triggeredEmails } from 'wix-crm-backend';
 
-export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (name, email, phone, result) => {
+export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (name, email, phone, result, categoryScores = {}) => {
     try {
 
-        console.log("🟨 Input received:", { name, email, result });
+        console.log("🟨 Input received:", { name, email, result, categoryScores });
 
         // ✅ Validate input
         if (!name || !email || !phone) {
@@ -55,28 +55,46 @@ export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (n
 
         if (!contactId) throw new Error("Failed to retrieve contact ID.");
 
-        const emailResult = await triggeredEmails.emailContact("VAzpW4t", contactId, {
-            variables: {
-                First_Name: firstName,
-                Last_Name: lastName,
-                Phone: phone,
-                Result: result,
-                SITE_URL: "https://evpdesigns.wixstudio.com/my-site"
-            }
-        });
-        const emailResult1 = await triggeredEmails.emailMember("VAzpW4t", "054e2505-8ea4-41c0-98f7-785a7302ec3d", {
-            variables: {
-                First_Name: firstName,
-                Last_Name: lastName,
-                Phone: phone,
-                Result: result,
-                SITE_URL: "https://evpdesigns.wixstudio.com/my-site"
-            }
-        });
+        const variables = {
+            First_Name: firstName,
+            Last_Name: lastName,
+            Phone: phone,
+            Result: result,
+            SITE_URL: "https://www.lifes2shortllc.com/",
+            ...(categoryScores || {})
+        };
 
+        // 1. Email the user who completed the quiz
+        const emailResult = await triggeredEmails.emailContact("VAzpW4t", contactId, { variables });
+
+        // 2. Email a copy to Judy (judy@lifes2shortllc.com)
+        const JUDY_EMAIL = "judy@lifes2shortllc.com";
+        let emailResultJudy = null;
+        try {
+            const existingJudy = await contacts.queryContacts()
+                .eq("info.emails.email", JUDY_EMAIL)
+                .find(queryOptions);
+
+            let judyContactId;
+            if (existingJudy.items.length > 0) {
+                judyContactId = existingJudy.items[0]._id;
+            } else {
+                const judyContact = await contacts.createContact({
+                    name: { first: "Judy", last: "" },
+                    emails: [{ email: JUDY_EMAIL, tag: "WORK", primary: true }]
+                }, { allowDuplicates: false, suppressAuth: true });
+                judyContactId = judyContact._id;
+            }
+
+            if (judyContactId && judyContactId !== contactId) {
+                emailResultJudy = await triggeredEmails.emailContact("VAzpW4t", judyContactId, { variables });
+            }
+        } catch (judyErr) {
+            console.error("⚠️ Error sending copy to Judy:", judyErr);
+        }
 
         console.log("📧 Email sent successfully.");
-        return { success: true, message: "Email sent successfully.", result: emailResult, result2: emailResult1 };
+        return { success: true, message: "Email sent successfully.", result: emailResult, resultJudy: emailResultJudy };
 
     } catch (error) {
         console.error("❌ Error in sendQuoteEmailWithContact:", error);

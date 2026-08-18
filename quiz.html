@@ -40,9 +40,11 @@
     }
 
     h2 {
-        color: #d73148;
+        color: #DA364D;
         margin-bottom: 20px;
         font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
     }
 
     .scale-table {
@@ -67,7 +69,7 @@
     .scale-box.active {
         background: #fde3e7;
         opacity: 1;
-        border: 1px solid #d73148;
+        border: 1px solid #DA364D;
     }
 
     .scale-box h3 {
@@ -101,14 +103,14 @@
     input[type="range"]::-webkit-slider-runnable-track {
         height: 8px;
         border-radius: 5px;
-        background: linear-gradient(to right, #d73148 var(--range-progress, 50%), #fde3e7 var(--range-progress, 50%));
+        background: linear-gradient(to right, #DA364D var(--range-progress, 50%), #fde3e7 var(--range-progress, 50%));
     }
 
     input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
         width: 20px;
         height: 20px;
-        background: #d73148;
+        background: #DA364D;
         border-radius: 50%;
         border: 3px solid #fff;
         margin-top: -6px;
@@ -117,7 +119,7 @@
 
     .slider-value {
         font-weight: 600;
-        color: #d73148;
+        color: #DA364D;
         min-width: 20px;
         text-align: center;
     }
@@ -133,7 +135,7 @@
     }
 
     #results-container h2 {
-        color: #d73148;
+        color: #DA364D;
         margin-bottom: 20px;
     }
 
@@ -158,7 +160,7 @@
         line-height: 1.7;
         color: #333;
         animation: fadeIn 0.5s ease-in-out;
-        border: 1px solid #d73148;
+        border: 1px solid #DA364D;
     }
 
     .additional-content p {
@@ -223,7 +225,7 @@
     }
 
     #results-container button {
-        background: #d73148;
+        background: #DA364D;
         color: #fff;
         border: none;
         padding: 10px 20px;
@@ -303,12 +305,12 @@
                 "I don't see myself as a leader and I don't always trust my own judgment. It struggle to make decisions. It is hard for me to trust others.",
                 "If I am honest, I have a tendency to micromanage, even though I may have support. I am beginning to trust myself taking some risks and making decisions.",
                 "If I am honest, I have a tendency to micromanage, even though I may have support. I am beginning to trust myself taking some risks and making decisions.",
-                "I own my role as a leader and make decisions easily and I know how and when to delegate. I am willing to take risks. I lead by example and I have a productive team who works well together. I have a positive workplace with dedicated employees"
+                "I own my role as a leader and make decisions easily and I know how and when to delegate. I am willing to take risks. I lead by example and I have a productive team who works together. I have a positive workplace with dedicated employees."
             ]
         },
         {
             name: "Self-Care", description: [
-                "I know I should take care of myself, but who has time? I am working 24/7to keep my business going I am not getting enough sleep and I always feel tired. I don't remember when I had a day off. much less a real vacation. I eat on the run most days and not the healthiest foods. No time to exercise either I can't remember when I last had a checkup. My family and friends rarely see me and say they are worried about me.",
+                "I know I should take care of myself, but who has time? I am working 24/7 to keep my business going. I am not getting enough sleep and I always feel tired. I don't remember when I had a day off, much less a real vacation. I eat on the run most days and not the healthiest foods. No time to exercise either. I can't remember when I last had a checkup. My family and friends rarely see me and say they are worried about me.",
                 "I am trying to improve my eating habits and get more sleep and exercise, but I often find myself putting these things on the back burner if something comes up at work. I have agreed to take a vacation, but my family and friends know I will most likely work for most of it.",
                 "I am trying to improve my eating habits and get more sleep and exercise, but I often find myself putting these things on the back burner if something comes up at work. I have agreed to take a vacation, but my family and friends know I will most likely work for most of it.",
                 "I know that my business and family depend on me and the importance of taking good care of myself for them. I eat nutritious foods, exercise several times a week and get enough sleep. I schedule and keep regular checkups with my doctor and take her advice. I do things every day to lower my stress and my vacations are work-free. I am finally taking care of my company's biggest asset - ME!"
@@ -316,10 +318,10 @@
         },
         {
             name: "Money-Matters", description: [
-                "I constantly worry about $. I am hesitant to spend $ to help my business grow. I cut comers whenever I can and try everything free that comes my way. I treat my business more like a hobby. I do not have a separate budget or bank account for my business.I allow my customers to determine what I charge for my goods and services and often give discounts or offer to do things for free.",
+                "I constantly worry about $. I am hesitant to spend $ to help my business grow. I cut corners whenever I can and try everything free that comes my way. I treat my business more like a hobby. I do not have a separate budget or bank account for my business. I allow my customers to determine what I charge for my goods and services and often give discounts or offer to do things for free.",
                 "I sometimes feel guilty or like a fraud if I think I am making too much $ or if I am asking too much for my services and products. I do have a separate bank account and a budget for my business.",
                 "I sometimes feel guilty or like a fraud if I think I am making too much $ or if I am asking too much for my services and products. I do have a separate bank account and a budget for my business.",
-                "I know that my business and family depend on me and the importance of taking good care of myself for them. I eat nutritious foods, exercise several times a week and get enough sleep. I schedule and keep regular checkups with my doctor and take her advice. I do things every day to lower my stress and my vacations are work-free. I am finally taking care of my company's biggest asset - ME!"
+                "Grow wealth. Get support from financial pros. Build long-term security and financial strategy. Don't forget to celebrate your success!"
             ]
         },
     ];
@@ -401,7 +403,7 @@
     const submitBtn = document.createElement("button");
     submitBtn.textContent = "View Your Business Builder Insights";
     submitBtn.style.cssText = `
-  background: #d73148;
+  background: #DA364D;
   color: #fff;
   border:none;
   padding: 12px 25px;
@@ -438,6 +440,7 @@
         }
 
         let emailResult = "";
+        const categoryResults = {};
 
         document.querySelectorAll(".slider").forEach(slider => {
             const category = slider.dataset.category;
@@ -478,7 +481,7 @@
                 if (value >= 1 && value <= 3) selectedRangeMessage = "Reflect on your leadership style. Start small, but start owning your decisions and vision.";
                 else if (value >= 4 && value <= 6) selectedRangeMessage = "Create a positive culture. Think about what it feels like being on the receiving end of you. Get feedback. Learn to delegate. Develop team building and communication skills.";
                 else if (value >= 7 && value <= 9) selectedRangeMessage = "Empower others! This is huge! You need future leaders in your business. Create a values-driven culture. Lead through change.";
-                else if (value === 10) selectedRangeMessage = "I own my role as a leader and make decisions easily and I know how and when to delegate. I am willing to take risks. I lead by example and I have a productive team who works well together. I have a positive workplace with dedicated employees";
+                else if (value === 10) selectedRangeMessage = "I own my role as a leader and make decisions easily and I know how and when to delegate. I am willing to take risks. I lead by example and I have a productive team who works together. I have a positive workplace with dedicated employees";
             } else if (category === "Self-Care") {
                 if (value >= 1 && value <= 3) selectedRangeMessage = "Identify energy drains. Prioritize sleep, nutrition, hydration";
                 else if (value >= 4 && value <= 6) selectedRangeMessage = "Schedule breaks. Add movement and exercise. Set work boundaries. This is absolutely necessary to take care of you and your business.";
@@ -491,14 +494,16 @@
                 else if (value === 10) selectedRangeMessage = "Grow wealth. Get support from financial pros. Build long-term security and financial strategy. Don't forget to celebrate your success!";
             }
 
-            // Using plain text formatting
-            emailResult += `\n${category.toUpperCase()}: ${selectedRangeMessage}\n`;
+            // Clean formatted text with clear spacing between header, description, and next section
+            emailResult += `${category.toUpperCase()}\n\n${selectedRangeMessage}\n\n----------------------------------------\n\n`;
+
+            // Normalized key for template variable substitution (e.g., Clarity, Mindset, Self_Management, etc.)
+            const key = category.replace(/[^a-zA-Z0-9]/g, "_");
+            categoryResults[key] = selectedRangeMessage;
         });
 
         // Add phone number to results
-        emailResult += `\nPHONE: ${phone}\n`;
-
-
+        emailResult += `PHONE: ${phone}\n`;
 
         // Send data to parent window (Wix Velo)
         window.parent.postMessage({
@@ -506,13 +511,14 @@
             name: name,
             email: email,
             phone: phone,
-            result: emailResult
+            result: emailResult,
+            categoryScores: categoryResults
         }, "*");
 
         // Show Success Message
         const successHTML = `
             <div class="additional-content" style="text-align: center;">
-                <h2 style="color:#d73148;">Thank You, ${name}!</h2>
+                <h2 style="color:#DA364D;">Thank You, ${name}!</h2>
                 <p style="font-size:18px;">Your business builder insights have been sent to <strong>${email}</strong>.</p>
                 <p>Please check your inbox (and spam folder) for your results.</p>
                 <br>

@@ -6,9 +6,15 @@ $w('#html1').onMessage(async (event) => {
     console.log("🟨 Received message:", receivedMessage);
     if (receivedMessage.type === "submit") {
         try {
-            await sendResultEmailWithContact(receivedMessage.name, receivedMessage.email, receivedMessage.phone, receivedMessage.result);
+            await sendResultEmailWithContact(
+                receivedMessage.name,
+                receivedMessage.email,
+                receivedMessage.phone,
+                receivedMessage.result,
+                receivedMessage.categoryScores
+            );
         } catch (error) {
             console.error("Error sending email:", error);
         }
     }
-})
+});
