@@ -59,9 +59,16 @@ export const sendResultEmailWithContact = webMethod(Permissions.Anyone, async (n
             First_Name: firstName,
             Last_Name: lastName,
             Phone: phone,
-            Result: result,
             SITE_URL: "https://www.lifes2shortllc.com/",
-            ...(categoryScores || {})
+            Clarity: categoryScores.Clarity || "",
+            Mindset: categoryScores.Mindset || "",
+            Self_Management: categoryScores.Self_Management || "",
+            Marketing: categoryScores.Marketing || "",
+            Selling: categoryScores.Selling || "",
+            Customer_Journey_and_Care: categoryScores.Customer_Journey_and_Care || "",
+            Leadership: categoryScores.Leadership || "",
+            Self_Care: categoryScores.Self_Care || "",
+            Money_Matters: categoryScores.Money_Matters || ""
         };
 
         // 1. Email the user who completed the quiz
