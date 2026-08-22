@@ -127,16 +127,20 @@
     /* Results container styles */
     #results-container {
         max-width: 700px;
+        width: 100%;
         margin: 40px auto;
         padding: 30px;
         border-radius: 10px;
         background: #fff;
         border: none;
+        box-sizing: border-box;
     }
 
     #results-container h2 {
         color: #DA364D;
         margin-bottom: 20px;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     #results-container ul {
@@ -155,18 +159,34 @@
         border-radius: 14px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         max-width: 700px;
+        width: 100%;
         margin: 30px auto;
         font-family: "Poppins", sans-serif;
         line-height: 1.7;
         color: #333;
         animation: fadeIn 0.5s ease-in-out;
         border: 1px solid #DA364D;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .additional-content h2 {
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .additional-content p {
         margin-bottom: 18px;
         font-size: 16px;
         color: #444;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .additional-content strong {
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
     .additional-content p:last-of-type {
@@ -236,6 +256,33 @@
 
     /* Mobile adjustments: hide slider, show all descriptions */
     @media (max-width: 768px) {
+        body {
+            margin: 10px;
+        }
+
+        .section {
+            padding: 15px;
+            margin: 20px auto;
+        }
+
+        #results-container {
+            padding: 10px 0;
+            margin: 20px auto;
+        }
+
+        .additional-content {
+            padding: 24px 16px;
+            margin: 15px auto;
+        }
+
+        .additional-content h2 {
+            font-size: 1.4rem;
+        }
+
+        .additional-content p {
+            font-size: 15px;
+        }
+
         .slider-container {
             display: none;
         }
@@ -517,10 +564,10 @@
 
         // Show Success Message
         const successHTML = `
-            <div class="additional-content" style="text-align: center;">
-                <h2 style="color:#DA364D;">Thank You, ${name}!</h2>
-                <p style="font-size:18px;">Your business builder insights have been sent to <strong>${email}</strong>.</p>
-                <p>Please check your inbox (and spam folder) for your results.</p>
+            <div class="additional-content" style="text-align: center; box-sizing: border-box; width: 100%; overflow-wrap: anywhere; word-break: break-word;">
+                <h2 style="color:#DA364D; overflow-wrap: anywhere; word-break: break-word;">Thank You, ${name}!</h2>
+                <p style="font-size:18px; overflow-wrap: anywhere; word-break: break-word; line-height: 1.5;">Your business builder insights have been sent to <strong style="word-break: break-word; overflow-wrap: anywhere; display: inline-block;">${email}</strong>.</p>
+                <p style="overflow-wrap: anywhere; word-break: break-word;">Please check your inbox (and spam folder) for your results.</p>
                 <br>
                 <p>You've got this and I've got your back.</p>
                 <p>Life's 2 Short to wait, so let's get started!</p>
